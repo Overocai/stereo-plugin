@@ -25,7 +25,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Stereo Mic",
     description: "Use um microfone estéreo, ou use o voicemeeter.",
-    authors: [{ name: "Zero'", id: 920065450983948328n }],
+    authors: [{ name: "Overocai", id: 1288832011452153910n }],
 
     // These regexes probably could be better, idk regex c:
     patches: [{
