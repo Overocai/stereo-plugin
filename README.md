@@ -1,8 +1,8 @@
 # Stereo Mic
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Made%20for-Equicord-5865F2?style=for-the-badge&logo=discord&logoColor=white" />
-  <img src="https://img.shields.io/badge/Vencord-compatible-a855f7?style=for-the-badge&logo=discord&logoColor=white" />
+  <a href="https://github.com/Equicord/Equicord"><img src="https://img.shields.io/badge/Made%20for-Equicord-5865F2?style=for-the-badge&logo=discord&logoColor=white" /></a>
+  <a href="https://github.com/Vendicated/Vencord"><img src="https://img.shields.io/badge/Vencord-compatible-a855f7?style=for-the-badge&logo=discord&logoColor=white" /></a>
   <img src="https://img.shields.io/badge/License-GPL%203.0--or--later-green?style=for-the-badge" />
 </p>
 
