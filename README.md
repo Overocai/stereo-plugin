@@ -51,7 +51,8 @@ This is a **userplugin**, so you need a [development install](https://docs.venco
 
 ## Credits
 
-Original plugin by **Zero'**.
+- **Maintained/forked by** [Overocai](https://github.com/Overocai)
+- **Original plugin by** Zero' (`1288832011452153910`)
 
 ## License
 
