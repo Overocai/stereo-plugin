@@ -34,13 +34,13 @@ By default, Discord forces your microphone to **mono** and sets the voice bitrat
 
 A new **equalizer icon button** appears in the voice control bar (next to mute, deafen, and screen share):
 
-```
-[ 🔇 ] [ 🖥️ ] [ 🎚️ ] [ 🎤 ] [ ⚙️ ]
-                  ↑
-           Voice Bitrate button
-```
+![Voice Bitrate button in the voice panel](screenshot-button.png)
 
-Clicking it opens a small panel with a **live bitrate slider**. Dragging it changes the bitrate **instantly while you are in a call** — no need to leave and rejoin. The value is also saved and will be used the next time you connect.
+Clicking it opens a small panel with a **live bitrate slider**:
+
+![Stereo Mic bitrate slider modal](screenshot-modal.png)
+
+Dragging it changes the bitrate **instantly while you are in a call** — no need to leave and rejoin. The value is also saved and will be used the next time you connect.
 
 ---
 
