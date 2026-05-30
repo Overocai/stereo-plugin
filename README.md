@@ -1,58 +1,34 @@
-# Stereo Mic
+# Stereo Mic — Equicord/Vencord Plugin
 
-> [!WARNING]
-> **Not working anymore — project discontinued (for now).**
->
-> Discord updates its audio modules very frequently, which constantly breaks the patches. Keeping up with every change and figuring out what broke is too much work to do alone, and the **original owner has simply abandoned the project**. So I've decided to step away from it for the time being.
->
-> I do intend to fix it eventually — just not right now. It's kept here for reference and as a base for anyone who wants to fork it.
+A simple Equicord/Vencord plugin that lets you transmit a **stereo microphone** signal (or route audio through **Voicemeeter**) instead of Discord's default mono voice, with extra control over **bitrate** and **forward error correction (FEC)**.
 
-A [Vencord](https://vencord.dev/) / [Equicord](https://equicord.org/) plugin that makes your **microphone transmit in true stereo** (2 channels) instead of Discord's default mono, with a configurable voice bitrate.
+> ⚠️ **Status:** This plugin may break whenever Discord updates its internal voice code. It worked at the time of writing, but is not actively maintained.
 
-It's meant for streamers, musicians and anyone routing audio through virtual cables (e.g. **VoiceMeeter**, VB-Cable) who wants both channels to come through.
+---
 
 ## Features
 
-- 🎧 **Stereo voice** — patches Discord's encoder to send 2 channels instead of 1.
-- 📈 **Custom voice bitrate** — a slider to push the bitrate up to **512 kbps** (default 512).
-- 🛠️ **FEC toggle** — enable/disable Forward Error Correction (off by default; it can cause crackling in stereo).
+- 🎙️ **Stereo microphone transmission** — send true left/right stereo instead of mono.
+- 🎚️ **Adjustable voice bitrate** — from 8 kbps up to 512 kbps via a slider.
+- 🛡️ **Forward Error Correction (FEC) toggle** — enable/disable Opus FEC for resilience on lossy connections.
+- 🔀 **Voicemeeter-friendly** — works well when routing audio through virtual audio cables/Voicemeeter.
 
-## Settings
-
-| Setting | Type | Default | Description |
-|---|---|---|---|
-| **Voice Bitrate** | Slider (8–512 kbps) | `512` | Bitrate used for your outgoing voice. |
-| **Enable FEC** | Toggle | `off` | Forward Error Correction. Helps on bad connections but may add crackling in stereo. |
+> ℹ️ **About the bitrate override:** the bitrate feature *should* be working (roughly an **80% chance** it applies correctly on your setup), but it's **not guaranteed 100%**. Discord may clamp values above ~510 kbps (the Opus codec limit), and the hook depends on internal Discord code that can change between updates. If the bitrate doesn't seem to change, try a value of **510 kbps or lower** and check the console for a `[StereoMic] Overriding Voice Bitrate` log.
 
 ## Installation
 
-This is a **userplugin**, so you need a [development install](https://docs.vencord.dev/installing/) of Vencord or Equicord (the prebuilt installer is not enough).
-
-1. Make sure you have Vencord or Equicord cloned and building from source.
-2. Download [`stereoMic.ts`](stereoMic.ts).
-3. Create a `userplugins` folder inside `src` if it doesn't exist:
-   - **Vencord** → `Vencord/src/userplugins/`
-   - **Equicord** → `Equicord/src/userplugins/`
-4. Drop `stereoMic.ts` into that folder.
-5. Rebuild and reinject:
+1. Make sure you have a custom Equicord/Vencord build environment set up ([guide](https://docs.vencord.dev/installing/)).
+2. Place this folder inside `src/userplugins/`.
+3. Rebuild Equicord/Vencord:
    ```bash
    pnpm build
-   pnpm inject
    ```
-6. Restart Discord, then enable **Stereo Mic** in **Settings → Plugins** and adjust the bitrate.
-
-> [!TIP]
-> For an actual stereo signal you usually want a stereo source — a stereo microphone or a virtual audio device like **VoiceMeeter** set as your input.
-
-## Notes
-
-- Forcing high bitrate and stereo uses more upload bandwidth.
-- Discord changes its audio modules often, so this plugin breaks regularly — that's the main reason it's currently unmaintained.
+4. Restart/reload Discord and enable **Stereo Mic** in the plugin settings.
 
 ## Credits
 
-[Overocai](https://github.com/Overocai)
+Original work and maintenance by [Overocai](https://github.com/Overocai).
 
 ## License
 
-GPL-3.0-or-later, matching the Vencord project.
+Discontinued / provided as-is. Use at your own risk.

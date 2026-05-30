@@ -17,34 +17,41 @@ const settings = definePluginSettings({
     },
     enableFec: {
         type: OptionType.BOOLEAN,
-        description: "Habilitar correção de erros de encaminhamento/CTR",
+        description: "Enable forward error correction (FEC)",
         default: false
     }
 });
 
 export default definePlugin({
     name: "Stereo Mic",
-    description: "Use um microfone estéreo, ou use o voicemeeter.",
+    description: "Use a stereo microphone, or use Voicemeeter.",
     authors: [{ name: "Overocai", id: 1288832011452153910n }],
 
-    // These regexes probably could be better, idk regex c:
-    patches: [{
-        find: "...this.getAttenuationOptions()",
-        replacement: [
-            {
-                match: /freq:48e3,pacsize:960,channels:1,rate:64e3/,
-                replace: "freq:48e3,pacsize:960,channels:2,params:{stereo:\"1\"},rate:64e3"
-            },
-            {
-                match: /setBitRate\(\i\){this\.setVoiceBitRate\(\i\)}/,
-                replace: "setBitRate($1){$self.setVoiceBitratePatch(this, $1)}"
-            },
-            {
-                match: /fec:!0/,
-                replace: "fec:$self.isFecEnabled()"
+    patches: [
+        {
+            // Stereo + FEC live in the getAttenuationOptions module
+            find: "...this.getAttenuationOptions()",
+            replacement: [
+                {
+                    match: /freq:48e3,pacsize:960,channels:1,rate:64e3/,
+                    replace: "freq:48e3,pacsize:960,channels:2,params:{stereo:\"1\"},rate:64e3"
+                },
+                {
+                    match: /fec:!0/,
+                    replace: "fec:$self.isFecEnabled()"
+                }
+            ]
+        },
+        {
+            // Override the value inside setVoiceBitRate itself (the real setter,
+            // always called on connect; Discord doesn't always go through setBitRate)
+            find: "){this.setVoiceBitRate(",
+            replacement: {
+                match: /setVoiceBitRate\(([A-Za-z_$][\w$]*)\)\{/,
+                replace: "setVoiceBitRate($1){$1=$self.getBitrate($1);"
             }
-        ]
-    }],
+        }
+    ],
 
     settings,
 
@@ -53,9 +60,9 @@ export default definePlugin({
         return settings.store.enableFec
     },
 
-    setVoiceBitratePatch(moduleContext: any, orgBitrate: number) {
+    getBitrate(orgBitrate: number) {
         console.log(`[StereoMic] Overriding Voice Bitrate (From ${orgBitrate/1000}kbps to ${settings.store.voiceBitrate}kbps)`)
 
-        moduleContext.setVoiceBitRate(settings.store.voiceBitrate*1000)
+        return settings.store.voiceBitrate*1000
     }
 });
