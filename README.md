@@ -1,34 +1,98 @@
-# Stereo Mic — Equicord/Vencord Plugin
+# Stereo Mic
 
-A simple Equicord/Vencord plugin that lets you transmit a **stereo microphone** signal (or route audio through **Voicemeeter**) instead of Discord's default mono voice, with extra control over **bitrate** and **forward error correction (FEC)**.
+A plugin for **Equicord** / **Vencord** that unlocks stereo microphone transmission on Discord, with live bitrate control and a quick-access button in the voice panel.
 
-> ⚠️ **Status:** This plugin may break whenever Discord updates its internal voice code. It worked at the time of writing, but is not actively maintained.
+> **Last updated: 2026-05-30**
+> Plugin was fully fixed and extended on this date. Stereo, FEC, bitrate override, and the live bitrate button are all working.
+>
+> ⚠️ Discord updates its voice internals frequently. If something breaks after a Discord update, the patches may need to be adjusted.
+
+---
+
+## What it does
+
+By default, Discord forces your microphone to **mono** and sets the voice bitrate automatically (usually 64–96 kbps). This plugin patches Discord's audio engine to:
+
+- **Send stereo audio** — both left and right channels are transmitted instead of being mixed down to mono. Essential if you use a stereo microphone, Voicemeeter, or any virtual audio cable with a stereo signal.
+- **Override the voice bitrate** — lets you push the bitrate up to 512 kbps (Opus codec limit is ~510 kbps) for noticeably higher audio quality, or drop it as low as 8 kbps.
+- **Toggle Forward Error Correction (FEC)** — Opus FEC adds redundancy to the audio stream to recover from packet loss on bad connections. Disabled by default because it can cause crackling with stereo audio.
 
 ---
 
 ## Features
 
-- 🎙️ **Stereo microphone transmission** — send true left/right stereo instead of mono.
-- 🎚️ **Adjustable voice bitrate** — from 8 kbps up to 512 kbps via a slider.
-- 🛡️ **Forward Error Correction (FEC) toggle** — enable/disable Opus FEC for resilience on lossy connections.
-- 🔀 **Voicemeeter-friendly** — works well when routing audio through virtual audio cables/Voicemeeter.
+| Feature | Description |
+|---|---|
+| 🎙️ **Stereo transmission** | Patches Discord's encoder to send 2 channels (L+R) instead of 1 |
+| 🎚️ **Adjustable bitrate** | Slider from 8 to 512 kbps, applied live without rejoining the call |
+| 🎛️ **Quick bitrate button** | Adds a button next to mute/deafen in the voice panel for instant access |
+| 🛡️ **FEC toggle** | Enable/disable Opus Forward Error Correction |
 
-> ℹ️ **About the bitrate override:** the bitrate feature *should* be working (roughly an **80% chance** it applies correctly on your setup), but it's **not guaranteed 100%**. Discord may clamp values above ~510 kbps (the Opus codec limit), and the hook depends on internal Discord code that can change between updates. If the bitrate doesn't seem to change, try a value of **510 kbps or lower** and check the console for a `[StereoMic] Overriding Voice Bitrate` log.
+---
+
+## The quick bitrate button
+
+A new **equalizer icon button** appears in the voice control bar (next to mute, deafen, and screen share):
+
+```
+[ 🔇 ] [ 🖥️ ] [ 🎚️ ] [ 🎤 ] [ ⚙️ ]
+                  ↑
+           Voice Bitrate button
+```
+
+Clicking it opens a small panel with a **live bitrate slider**. Dragging it changes the bitrate **instantly while you are in a call** — no need to leave and rejoin. The value is also saved and will be used the next time you connect.
+
+---
+
+## Settings
+
+| Setting | Type | Default | Description |
+|---|---|---|---|
+| **Voice Bitrate** | Slider (8–512 kbps) | `512` | Bitrate for your outgoing voice. Applied live. |
+| **Enable FEC** | Toggle | `off` | Forward Error Correction. Helps on bad connections but may cause crackling in stereo. |
+
+> **Tip:** values above ~510 kbps may be clamped by the Opus codec. For maximum quality without risk of rejection, use **510 kbps or lower**.
+
+---
+
+## How to check it is working
+
+1. Enable the plugin and join a voice channel.
+2. Open the Discord console (`Ctrl+Shift+I` → Console tab).
+3. Filter by `StereoMic` — you should see:
+   ```
+   [StereoMic] Overriding FEC
+   [StereoMic] Overriding Voice Bitrate (From 96kbps to 512kbps)
+   ```
+   If both lines appear, everything is working correctly.
+
+---
 
 ## Installation
 
-1. Make sure you have a custom Equicord/Vencord build environment set up ([guide](https://docs.vencord.dev/installing/)).
+1. You need a **source build** of Equicord or Vencord ([setup guide](https://docs.vencord.dev/installing/)).
 2. Place this folder inside `src/userplugins/`.
-3. Rebuild Equicord/Vencord:
+3. Rebuild:
    ```bash
    pnpm build
    ```
-4. Restart/reload Discord and enable **Stereo Mic** in the plugin settings.
+4. Fully restart Discord (close from the system tray, not just the window).
+5. Enable **Stereo Mic** in Settings → Plugins.
+
+---
+
+## Notes
+
+- Stereo only works if your **input device actually sends a stereo signal**. A regular mono microphone will still sound mono even with this plugin. For true stereo, use a stereo microphone or route audio through **Voicemeeter** / a virtual audio cable configured as stereo.
+- The bitrate override has an **~80% reliability rate** — it depends on Discord's internal connection state. If it does not seem to change, try rejoining the call.
+- High bitrate + stereo increases your **upload bandwidth** usage.
+
+---
 
 ## Credits
 
-Original work and maintenance by [Overocai](https://github.com/Overocai).
+[Overocai](https://github.com/Overocai)
 
 ## License
 
-Discontinued / provided as-is. Use at your own risk.
+GPL-3.0-or-later, matching the Vencord/Equicord project.
