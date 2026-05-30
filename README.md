@@ -2,7 +2,7 @@
 
 A plugin for **Equicord** / **Vencord** that unlocks stereo microphone transmission on Discord, with live bitrate control and a quick-access button in the voice panel.
 
-> **Last updated: 2026-05-30**
+> # **Last updated: 30/05/2026**
 > Plugin was fully fixed and extended on this date. Stereo, FEC, bitrate override, and the live bitrate button are all working.
 >
 > ⚠️ Discord updates its voice internals frequently. If something breaks after a Discord update, the patches may need to be adjusted.
