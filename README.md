@@ -1,5 +1,13 @@
 # Stereo Mic
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Made%20for-Equicord-5865F2?style=for-the-badge&logo=discord&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vencord-compatible-a855f7?style=for-the-badge&logo=discord&logoColor=white" />
+  <img src="https://img.shields.io/badge/License-GPL%203.0--or--later-green?style=for-the-badge" />
+</p>
+
+<h2 align="center">⛔ BetterDiscord is NOT supported</h2>
+
 A plugin for **Equicord** / **Vencord** that unlocks stereo microphone transmission on Discord, with live bitrate control and a quick-access button in the voice panel.
 
 > # **Last updated: 30/05/2026**
