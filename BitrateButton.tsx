@@ -9,9 +9,15 @@
  * Discord shuffles its internal components around.
  */
 
-import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { React, Text } from "@webpack/common";
+import { findComponentByCodeLazy } from "@webpack";
+
+const PanelButton = findComponentByCodeLazy<React.ComponentType<{
+    tooltipText: string;
+    icon: React.ComponentType<{ className?: string }>;
+    onClick(): void;
+}>>(".GREEN,positionKeyStemOverride:");
 
 import { applyBitrate, settings } from "./stereoMic";
 
@@ -69,10 +75,12 @@ function openBitrateModal() {
     ));
 }
 
-export const renderBitrateButton = (_props: UserAreaRenderProps) => (
-    <UserAreaButton
-        icon={<BitrateIcon />}
-        tooltipText="Voice Bitrate"
-        onClick={openBitrateModal}
-    />
-);
+export function renderBitrateButton(_props: Record<string, any>) {
+    return (
+        <PanelButton
+            icon={BitrateIcon}
+            tooltipText="Voice Bitrate"
+            onClick={openBitrateModal}
+        />
+    );
+}
