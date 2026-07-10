@@ -1,7 +1,8 @@
 import definePlugin, { OptionType } from "@utils/types";
 import { definePluginSettings } from "@api/Settings";
 
-import { BitrateIcon, renderBitrateButton } from "./BitrateButton";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { renderBitrateButton } from "./BitrateButton";
 
 // Last voice connection seen by the setVoiceBitRate hook, so we can re-apply
 // the bitrate live (while in a call) when the slider changes.
@@ -48,12 +49,10 @@ export default definePlugin({
     description: "Use a stereo microphone, or use Voicemeeter.",
     authors: [{ name: "Overocai", id: 1288832011452153910n }],
 
-    // Needed so the quick-bitrate button can register in the user/voice panel
-    dependencies: ["UserAreaAPI"],
+    settings,
 
     patches: [
         {
-            // Stereo + FEC live in the getAttenuationOptions module
             find: "...this.getAttenuationOptions()",
             replacement: [
                 {
@@ -67,23 +66,22 @@ export default definePlugin({
             ]
         },
         {
-            // Override the value inside setVoiceBitRate itself (the real setter,
-            // always called on connect; Discord doesn't always go through setBitRate)
             find: "){this.setVoiceBitRate(",
             replacement: {
                 match: /setVoiceBitRate\(([A-Za-z_$][\w$]*)\)\{/,
                 replace: "setVoiceBitRate($1){$1=$self.getBitrate(this,$1);"
             }
+        },
+        {
+            find: "#{intl::USER_PROFILE_ACCOUNT_POPOUT_BUTTON_A11Y_LABEL}",
+            replacement: {
+                match: /children:\[(?=.{0,25}?accountContainerRef)/,
+                replace: "children:[$self.renderBitrateButton(arguments[0]),"
+            }
         }
     ],
 
-    settings,
-
-    // Adds a quick-access bitrate button next to the mute/deafen controls.
-    userAreaButton: {
-        render: renderBitrateButton,
-        icon: BitrateIcon
-    },
+    renderBitrateButton: ErrorBoundary.wrap(renderBitrateButton, { noop: true }),
 
     isFecEnabled() {
         console.log(`[StereoMic] Overriding FEC`)
